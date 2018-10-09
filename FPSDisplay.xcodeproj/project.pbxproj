@@ -15,8 +15,8 @@
 		BC910E8C216C426C00EB9D72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910E8B216C426C00EB9D72 /* main.m */; };
 		BC910E96216C426C00EB9D72 /* FPSDisplayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910E95216C426C00EB9D72 /* FPSDisplayTests.m */; };
 		BC910EA1216C426C00EB9D72 /* FPSDisplayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910EA0216C426C00EB9D72 /* FPSDisplayUITests.m */; };
-		BC910EB9216C91E300EB9D72 /* FPSViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910EB7216C91E300EB9D72 /* FPSViewManager.m */; };
-		BC910EBC216C91F000EB9D72 /* FPSView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910EBB216C91F000EB9D72 /* FPSView.m */; };
+		BC910F01216CBD5B00EB9D72 /* FPSView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910EFF216CBD5B00EB9D72 /* FPSView.m */; };
+		BC910F02216CBD5B00EB9D72 /* FPSViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,10 +53,10 @@
 		BC910E9C216C426C00EB9D72 /* FPSDisplayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPSDisplayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC910EA0216C426C00EB9D72 /* FPSDisplayUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FPSDisplayUITests.m; sourceTree = "<group>"; };
 		BC910EA2216C426C00EB9D72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BC910EB7216C91E300EB9D72 /* FPSViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPSViewManager.m; path = View/FPSViewManager.m; sourceTree = "<group>"; };
-		BC910EB8216C91E300EB9D72 /* FPSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPSView.h; path = View/FPSView.h; sourceTree = "<group>"; };
-		BC910EBA216C91F000EB9D72 /* FPSViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FPSViewManager.h; path = View/FPSViewManager.h; sourceTree = "<group>"; };
-		BC910EBB216C91F000EB9D72 /* FPSView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FPSView.m; path = View/FPSView.m; sourceTree = "<group>"; };
+		BC910EFD216CBD5B00EB9D72 /* FPSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSView.h; sourceTree = "<group>"; };
+		BC910EFE216CBD5B00EB9D72 /* FPSViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSViewManager.h; sourceTree = "<group>"; };
+		BC910EFF216CBD5B00EB9D72 /* FPSView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSView.m; sourceTree = "<group>"; };
+		BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +107,7 @@
 		BC910E7B216C426900EB9D72 /* FPSDisplay */ = {
 			isa = PBXGroup;
 			children = (
-				BC910EB0216C434A00EB9D72 /* View */,
+				BC910EFC216CBD5B00EB9D72 /* View */,
 				BC910E7C216C426900EB9D72 /* AppDelegate.h */,
 				BC910E7D216C426900EB9D72 /* AppDelegate.m */,
 				BC910E7F216C426900EB9D72 /* ViewController.h */,
@@ -139,15 +139,15 @@
 			path = FPSDisplayUITests;
 			sourceTree = "<group>";
 		};
-		BC910EB0216C434A00EB9D72 /* View */ = {
+		BC910EFC216CBD5B00EB9D72 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BC910EBB216C91F000EB9D72 /* FPSView.m */,
-				BC910EBA216C91F000EB9D72 /* FPSViewManager.h */,
-				BC910EB8216C91E300EB9D72 /* FPSView.h */,
-				BC910EB7216C91E300EB9D72 /* FPSViewManager.m */,
+				BC910EFD216CBD5B00EB9D72 /* FPSView.h */,
+				BC910EFE216CBD5B00EB9D72 /* FPSViewManager.h */,
+				BC910EFF216CBD5B00EB9D72 /* FPSView.m */,
+				BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */,
 			);
-			name = View;
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,10 +280,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC910F01216CBD5B00EB9D72 /* FPSView.m in Sources */,
+				BC910F02216CBD5B00EB9D72 /* FPSViewManager.m in Sources */,
 				BC910E81216C426900EB9D72 /* ViewController.m in Sources */,
 				BC910E8C216C426C00EB9D72 /* main.m in Sources */,
-				BC910EBC216C91F000EB9D72 /* FPSView.m in Sources */,
-				BC910EB9216C91E300EB9D72 /* FPSViewManager.m in Sources */,
 				BC910E7E216C426900EB9D72 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

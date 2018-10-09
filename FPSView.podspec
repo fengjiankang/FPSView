@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "FPSView"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "Show the fps of iOS application."
 
   s.homepage     = "https://github.com/fengjiankang/FPSView.git"
@@ -52,7 +52,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "FPSDisplay", "FPSDisplay/View/*"
+  s.source_files  = "FPSDisplay/View/*"
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
