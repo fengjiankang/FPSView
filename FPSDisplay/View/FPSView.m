@@ -58,7 +58,7 @@
     
     if (delta >= 1) {
         self.lastTime = link.timestamp;
-        float fps = self.count / delta;
+        float fps = round(self.count / delta);
         self.count = 0;
         [self updateDisplayLabelText:fps];
     }

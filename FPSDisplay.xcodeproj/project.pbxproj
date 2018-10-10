@@ -143,8 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				BC910EFD216CBD5B00EB9D72 /* FPSView.h */,
-				BC910EFE216CBD5B00EB9D72 /* FPSViewManager.h */,
 				BC910EFF216CBD5B00EB9D72 /* FPSView.m */,
+				BC910EFE216CBD5B00EB9D72 /* FPSViewManager.h */,
 				BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */,
 			);
 			path = View;

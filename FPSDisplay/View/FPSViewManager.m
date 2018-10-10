@@ -38,8 +38,20 @@
         fpsWindow.hidden = NO;
         [[UIApplication sharedApplication].keyWindow addSubview:fpsWindow];
         [_fpsWindow addSubview:self.fpsView];
+        [self addPanGuesture];
     }
     return _fpsWindow;
+}
+
+-(void)addPanGuesture {
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panWindow:)];
+    [_fpsWindow addGestureRecognizer:pan];
+}
+
+-(void)panWindow:(UIPanGestureRecognizer *)sender {
+    CGPoint point = [sender translationInView:_fpsWindow];
+    sender.view.transform = CGAffineTransformTranslate(sender.view.transform, point.x, point.y);
+    [sender setTranslation:CGPointZero inView:sender.view];
 }
 
 -(FPSView *)fpsView {
