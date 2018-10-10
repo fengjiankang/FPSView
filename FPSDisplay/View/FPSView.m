@@ -27,9 +27,13 @@
 // memoryLabel
 @property (strong, nonatomic) UILabel* memoryLabel;
 
+CFRunLoopObserverRef _observer;
+
 @end
 
 @implementation FPSView
+
+static double _waitStartTime;
 
 -(instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -47,6 +51,66 @@
     [self initCountText];
     [self initMemoryText];
     
+    [self startMonitor];
+    
+}
+
+#pragma mark runloop observer
+-(void)addMainThreadObserver {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @autoreleasepool {
+            NSRunLoop *loop = [NSRunLoop currentRunLoop];
+            
+            // 设置Runloop observer的运行环境
+            CFRunLoopObserverContext context = {0, (__bridge void*)(self), NULL, NULL, NULL};
+    
+            //创建Run loop observer对象
+            // 表示observer如何分配内存
+            // runloop 要监听的事件
+            // 该observer是在第一次进入run loop时执行还是每次进入run loop处理时均执行
+            // 优先级别
+            // 设置回调
+            // observer's context
+            
+            _observer = CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopAllActivities, YES, 0, &myRunLoopObserver, &context);
+            
+            if (_observer) {
+                CFRunLoopRef cfRunloop = [loop getCFRunLoop];
+                CFRunLoopAddObserver(cfRunloop, _observer, kCFRunLoopDefaultMode);
+            }
+        }
+    });
+}
+
+void myRunLoopObserver(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
+    switch (activity) {
+        case kCFRunLoopEntry:
+            NSLog(@"runloop entry");
+            break;
+        case kCFRunLoopBeforeTimers:
+            NSLog(@"run loop before timers");
+            break;
+        case kCFRunLoopBeforeSources:
+            NSLog(@"run loop before sources");
+            break;
+        case kCFRunLoopBeforeWaiting:
+            _waitStartTime = 0;
+            NSLog(@"run loop before waiting");
+            break;
+        case kCFRunLoopAfterWaiting:
+            _waitStartTime = [[NSDate date] timeIntervalSince1970];
+            NSLog(@"run loop after waiting");
+            break;
+        case kCFRunLoopExit:
+            NSLog(@"run loop exit");
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)startMonitor {
+    [self addMainThreadObserver];
 }
 
 -(void)initCADisplaylink {
