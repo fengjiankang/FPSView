@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "FPSView"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "Show the fps of iOS application."
 
   s.homepage     = "https://github.com/fengjiankang/FPSView.git"
