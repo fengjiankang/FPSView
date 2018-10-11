@@ -11,6 +11,7 @@
 #import <mach/mach.h>
 #include <libkern/OSAtomic.h>
 #include <execinfo.h>
+#import "TraceLogger.h"
 
 @interface FPSView()
 
@@ -65,6 +66,8 @@ static double StumbleCritical = 2.0;
     
     [self startMonitor];
     
+    [TraceLogger getThreadCount];
+    
 }
 
 #pragma mark runloop observer
@@ -98,24 +101,18 @@ static double StumbleCritical = 2.0;
 void myRunLoopObserver(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
     switch (activity) {
         case kCFRunLoopEntry:
-            NSLog(@"runloop entry");
             break;
         case kCFRunLoopBeforeTimers:
-            NSLog(@"run loop before timers");
             break;
         case kCFRunLoopBeforeSources:
-            NSLog(@"run loop before sources");
             break;
         case kCFRunLoopBeforeWaiting:
             _waitStartTime = 0;
-            NSLog(@"run loop before waiting");
             break;
         case kCFRunLoopAfterWaiting:
             _waitStartTime = [[NSDate date] timeIntervalSince1970];
-            NSLog(@"run loop after waiting");
             break;
         case kCFRunLoopExit:
-            NSLog(@"run loop exit");
             break;
         default:
             break;
