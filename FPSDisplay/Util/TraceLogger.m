@@ -149,6 +149,17 @@ bool czb_mach_linkRegister(mcontext_t const machineContext) {
     #endif
 }
 
+// get the function's Frame Pointer at the thread stack, store the last Stack Frame's Stack Pointer
+uintptr_t czb_mach_framePointer(mcontext_t const machineContext) {
+    return machineContext->__ss.BS_FRAME_POINTER;
+}
+
+// copy frame to dst
+kern_return_t czb_mach_copyMem(const void *const src, void *const dst, const size_t numBytes) {
+    vm_size_t bytesCopied = 0;
+    return vm_read_overwrite(mach_task_self(), (vm_address_t)src, (vm_size_t)numBytes, (vm_address_t)dst, &bytesCopied);
+}
+
 #pragma mark Get call backtrace of a mach_thread
 NSString *_czb_backtraceOfThread(thread_t thread) {
     uintptr_t backtraceBuffer[50];
@@ -175,9 +186,163 @@ NSString *_czb_backtraceOfThread(thread_t thread) {
     }
     
     StackFrameEntry frame = {0};
+    const uintptr_t framePtr = czb_mach_framePointer(&machineContext);
+    if (framePtr == 0 || czb_mach_copyMem((void *)framePtr, &frame, sizeof(frame)) != KERN_SUCCESS) {
+        return @"Fail to get frame pointer";
+    }
+    
+    for (; i < 50; i++) {
+        // stack pointer
+        backtraceBuffer[i] = frame.return_address;
+        if (backtraceBuffer[i] == 0 || frame.previous == 0 || czb_mach_copyMem(frame.previous, &frame, sizeof(frame)) != KERN_SUCCESS) {
+            break;
+        }
+    }
+    
+    int backtraceLength = i;
+    Dl_info symbolicated[backtraceLength];
+    czb_symbolicate(backtraceBuffer, symbolicated, backtraceLength, 0);
     
     return [resultString copy];
 }
+
+#pragma mark Symbolicate
+void czb_symbolicate(const uintptr_t* const backtraceBuffer, Dl_info* const symbolsBuffer, const int numEntries, const int skippedEntries) {
+    int i = 0;
+    
+    if (!skippedEntries && i < numEntries) {
+        czb_dladdr(backtraceBuffer[i], &symbolsBuffer[i]);
+    }
+}
+
+///*
+// * Structure filled in by dladdr().
+// */
+//typedef struct dl_info {
+//    const char      *dli_fname;     /* Pathname of shared object */
+//    void            *dli_fbase;     /* Base address of shared object */
+//    const char      *dli_sname;     /* Name of nearest symbol */
+//    void            *dli_saddr;     /* Address of nearest symbol */
+//} Dl_info;
+
+bool czb_dladdr(const uintptr_t address, Dl_info* const info) {
+    info->dli_fname = NULL;
+    info->dli_fbase = NULL;
+    info->dli_sname = NULL;
+    info->dli_saddr = NULL;
+    
+    const uint32_t idx = czb_imageIndexContainingAddress(address);
+    if (idx == UINT_MAX) {
+        return false;
+    }
+    const struct mach_header* header = _dyld_get_image_header(idx);
+    const uintptr_t imageVMAddrSlide = (uintptr_t)_dyld_get_image_vmaddr_slide(idx);
+    const uintptr_t addressWithSlide = address - imageVMAddrSlide;
+    const uintptr_t segmentBase = czb_segmentBaseOfImageIndex(idx) + imageVMAddrSlide;
+    return false;
+}
+
+///*
+// * The 32-bit mach header appears at the very beginning of the object file for
+// * 32-bit architectures.
+// */
+//struct mach_header {
+//    uint32_t    magic;        /* mach magic number identifier */
+//    cpu_type_t    cputype;    /* cpu specifier */
+//    cpu_subtype_t    cpusubtype;    /* machine specifier */
+//    uint32_t    filetype;    /* type of file */
+//    uint32_t    ncmds;        /* number of load commands */
+//    uint32_t    sizeofcmds;    /* the size of all the load commands */
+//    uint32_t    flags;        /* flags */
+//};
+uint32_t czb_imageIndexContainingAddress(const uintptr_t address) {
+    const uint32_t imageCount = _dyld_image_count();
+    const struct mach_header* header = 0;
+    
+    for (uint32_t iImg = 0; iImg < imageCount; iImg++) {
+        header = _dyld_get_image_header(iImg);
+        if (header != NULL) {
+            // Look for a segment command with this address within its range
+            uintptr_t addressWSlide = address - (uintptr_t)_dyld_get_image_vmaddr_slide(iImg);
+            uintptr_t cmdPtr = czb_firstCmdAfterHeader(header);
+            if (cmdPtr == 0) {
+                continue;
+            }
+            for (uint32_t iCmd = 0; iCmd < header->ncmds; iCmd++) {
+                const struct load_command* loadCmd = (struct load_command*)cmdPtr;
+                if (loadCmd->cmd == LC_SEGMENT) {
+                    const struct segment_command* segCmd = (struct segment_command*)cmdPtr;
+                    if (addressWSlide >= segCmd->vmaddr && addressWSlide < segCmd->vmaddr + segCmd->vmsize) {
+                        return iImg;
+                    }
+                }
+                else if (loadCmd->cmd == LC_SEGMENT_64) {
+                    const struct segment_command_64* segCmd = (struct segment_command_64*)cmdPtr;
+                    if(addressWSlide >= segCmd->vmaddr &&
+                       addressWSlide < segCmd->vmaddr + segCmd->vmsize) {
+                        return iImg;
+                    }
+                }
+                cmdPtr += loadCmd->cmdsize;
+            }
+        }
+    }
+    return UINT_MAX;
+}
+
+///*
+// * The 32-bit mach header appears at the very beginning of the object file for
+// * 32-bit architectures.
+// */
+//struct mach_header {
+//    uint32_t    magic;        /* mach magic number identifier */
+//    cpu_type_t    cputype;    /* cpu specifier */
+//    cpu_subtype_t    cpusubtype;    /* machine specifier */
+//    uint32_t    filetype;    /* type of file */
+//    uint32_t    ncmds;        /* number of load commands */
+//    uint32_t    sizeofcmds;    /* the size of all the load commands */
+//    uint32_t    flags;        /* flags */
+//};
+uintptr_t czb_firstCmdAfterHeader(const struct mach_header* const header) {
+    switch (header->magic) {
+        case MH_MAGIC:
+        case MH_CIGAM:
+            return (uintptr_t)(header + 1);
+        case MH_MAGIC_64:
+        case MH_CIGAM_64:
+            return (uintptr_t)(((struct mach_header_64*)header) + 1);
+        default:
+            return 0; // Header is corrupt
+    }
+}
+
+uintptr_t czb_segmentBaseOfImageIndex(const uint32_t idx) {
+    const struct mach_header* header = _dyld_get_image_header(idx);
+    
+    // Look for a segment command and return the file image address
+    uintptr_t cmdPtr = czb_firstCmdAfterHeader(header);
+    if (cmdPtr == 0) {
+        return 0;
+    }
+    for (uint32_t i = 0; i < header->ncmds; i++) {
+        const struct load_command* loadCmd = (struct load_command *)cmdPtr;
+        if (loadCmd->cmd == LC_SEGMENT) {
+            const struct segment_command* segmentCmd = (struct segment_command*)cmdPtr;
+            if (strcmp(segmentCmd->segname, SEG_LINKEDIT) == 0) {
+                return segmentCmd->vmaddr - segmentCmd->fileoff;
+            }
+        }
+        else if (loadCmd->cmd == LC_SEGMENT_64) {
+            const struct segment_command_64* segmentCmd = (struct segment_command_64*)cmdPtr;
+            if(strcmp(segmentCmd->segname, SEG_LINKEDIT) == 0) {
+                return (uintptr_t)(segmentCmd->vmaddr - segmentCmd->fileoff);
+            }
+        }
+        cmdPtr += loadCmd->cmdsize;
+    }
+    return 0;
+}
+
 
 #pragma mark Convert NSThread to Mach thread
 thread_t czb_machThreadFromNSThread(NSThread *nsthread) {
