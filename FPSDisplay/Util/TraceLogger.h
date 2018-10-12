@@ -10,6 +10,6 @@
 
 @interface TraceLogger : NSObject
 
-+(void)getThreadCount;
++(int)getThreadCount;
 
 @end

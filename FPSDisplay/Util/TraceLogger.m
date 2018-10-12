@@ -86,12 +86,12 @@
 #define TRACE_FMT         "%-4d%-31s 0x%016lx %s + %lu"
 #define POINTER_FMT       "0x%016lx"
 #define POINTER_SHORT_FMT "0x%lx"
-#define BS_NLIST struct nlist_64
+#define CZB_NLIST struct nlist_64
 #else
 #define TRACE_FMT         "%-4d%-31s 0x%08lx %s + %lu"
 #define POINTER_FMT       "0x%08lx"
 #define POINTER_SHORT_FMT "0x%lx"
-#define BS_NLIST struct nlist
+#define CZB_NLIST struct nlist
 #endif
 
 typedef struct StackFrameEntry {
@@ -107,13 +107,13 @@ static mach_port_t main_thread_id;
     main_thread_id = mach_thread_self();
 }
 
-+(void)getThreadCount {
++(int)getThreadCount {
     char name[256];
     mach_msg_type_name_t count;
     thread_act_array_t list;
     task_threads(mach_task_self(), &list, &count);
     
-    NSLog(@"获取线程个数：%d, %d", count, main_thread_id);
+    NSLog(@"获取线程个数：%d", count);
     
     for (int i = 0 ; i < count; i++) {
         
@@ -125,9 +125,11 @@ static mach_port_t main_thread_id;
             if (!strcmp(name, [[NSThread currentThread] name].UTF8String)) {
             }
         }
-        
-        NSLog(@"thread is %s", name);
+        if (name[0] != '\0') {
+            NSLog(@"thread is %s", name);
+        }
     }
+    return count;
 }
 
 #pragma mark HandleMachineContext
@@ -202,7 +204,10 @@ NSString *_czb_backtraceOfThread(thread_t thread) {
     int backtraceLength = i;
     Dl_info symbolicated[backtraceLength];
     czb_symbolicate(backtraceBuffer, symbolicated, backtraceLength, 0);
-    
+    for (int i = 0; i < backtraceLength; i++) {
+        [resultString appendFormat:@"%@", czb_logBacktraceEntry(i, backtraceBuffer[i], &symbolicated[i])];
+    }
+    [resultString appendFormat:@"\n"];
     return [resultString copy];
 }
 
@@ -212,6 +217,11 @@ void czb_symbolicate(const uintptr_t* const backtraceBuffer, Dl_info* const symb
     
     if (!skippedEntries && i < numEntries) {
         czb_dladdr(backtraceBuffer[i], &symbolsBuffer[i]);
+        i++;
+    }
+    
+    for (; i < numEntries; i++) {
+        czb_dladdr(CALL_INSTRUCTION_FROM_RETURN_ADDRESS(backtraceBuffer[i]), &symbolsBuffer[i]);
     }
 }
 
@@ -238,8 +248,83 @@ bool czb_dladdr(const uintptr_t address, Dl_info* const info) {
     const struct mach_header* header = _dyld_get_image_header(idx);
     const uintptr_t imageVMAddrSlide = (uintptr_t)_dyld_get_image_vmaddr_slide(idx);
     const uintptr_t addressWithSlide = address - imageVMAddrSlide;
+    //链接时程序的基址 = __LINKEDIT.VM_Address – __LINKEDIT.File_Offset + silde的改变值
     const uintptr_t segmentBase = czb_segmentBaseOfImageIndex(idx) + imageVMAddrSlide;
-    return false;
+    if (segmentBase == 0) return false;
+    
+    info->dli_fname = _dyld_get_image_name(idx);
+    info->dli_fbase = (void *)header;
+    
+    // Find symbol tables and get whichever symbol is closest to the adress
+    const CZB_NLIST* bestMatch = NULL;
+    uintptr_t bestDistance = ULONG_MAX;
+    uintptr_t cmdPtr = czb_firstCmdAfterHeader(header);
+    if (cmdPtr == 0) return false;
+ 
+//    /*
+//     * The symtab_command contains the offsets and sizes of the link-edit 4.3BSD
+//     * "stab" style symbol table information as described in the header files
+//     * <nlist.h> and <stab.h>.
+//     */
+//    struct symtab_command {
+//        uint32_t    cmd;        /* LC_SYMTAB */
+//        uint32_t    cmdsize;    /* sizeof(struct symtab_command) */
+//        uint32_t    symoff;        /* symbol table offset */
+//        uint32_t    nsyms;        /* number of symbol table entries */
+//        uint32_t    stroff;        /* string table offset */
+//        uint32_t    strsize;    /* string table size in bytes */
+//    };
+// symtab_command主要是提供符号表的偏移量，以及元素个数，还有字符串表的偏移和其长度。符号表在 Mach-O 目标文件中的地址可以通过 LC_SYMTAB 加载命令指定的 symoff 找到，对应的符号名称在 stroff ，总共有 nsyms 条符号信息
+    
+    for (uint32_t iCmd = 0; iCmd < header->ncmds; iCmd++) {
+        const struct load_command* loadCmd = (struct load_command*)cmdPtr;
+        if (loadCmd->cmd == LC_SYMTAB) {
+            const struct symtab_command* symtabCmd = (struct symtab_command*)cmdPtr;
+            // 符号表的地址 = 基址 + 符号表偏移量
+            const CZB_NLIST* symbolTable = (CZB_NLIST *)(segmentBase + symtabCmd->symoff);
+            // string表的地址 = 基址 + string表偏移量
+            const uintptr_t stringTable = segmentBase + symtabCmd->stroff;
+            //            struct nlist {
+            //                union {
+            //#ifndef __LP64__
+            //                    char *n_name;    /* for use when in-core */
+            //#endif
+            //                    uint32_t n_strx;    /* index into the string table */
+            //                } n_un;
+            //                uint8_t n_type;        /* type flag, see below */
+            //                uint8_t n_sect;        /* section number or NO_SECT */
+            //                int16_t n_desc;        /* see <mach-o/stab.h> */
+            //                uint32_t n_value;    /* value of this symbol (or stab offset) */
+            //            };
+            for (uint32_t iSym = 0; iSym < symtabCmd->nsyms; iSym++) {
+                // if n_value is 0, the symble is refer to an external object.
+//                addr >= symbol.value; 因为addr是某个函数中的一条指令地址，它应该大于等于这个函数的入口地址，也就是对应符号的值；symbol.value is nearest to addr; 离指令地址addr更近的函数入口地址，才是更准确的匹配项；所以遍历symbolTable获取所有的symbol.value 与addressWithSlide比较，得到一个最接近于addressWithSlide 的symbol.value
+                if (symbolTable[iSym].n_value != 0) {
+                    uintptr_t symbolBase = symbolTable[iSym].n_value;
+                    uintptr_t currentDistance = addressWithSlide - symbolBase;
+                    if ((addressWithSlide >= symbolBase) && (currentDistance <= bestDistance)) {
+                        bestMatch = symbolTable + iSym;
+                        bestDistance = currentDistance;
+                    }
+                }
+            }
+            if (bestMatch != NULL) {
+//                info->dli_saddr = (void*)(bestMatch->n_value + imageVMAddrSlide);得到最接近于address的符号地址（symbol address）address - symbol address = slide，这里的slide正是crash 堆栈中的slide
+                info->dli_saddr = (void*)(bestMatch->n_value + imageVMAddrSlide);
+                info->dli_sname = (char*)((intptr_t)stringTable + (intptr_t)bestMatch->n_un.n_strx);
+                if (*info->dli_sname == '_') {
+                    info->dli_sname++;
+                }
+                // This happens if all symbols have been stripped.
+                if (info->dli_saddr == info->dli_fbase && bestMatch->n_type == 3) {
+                    info->dli_sname = NULL;
+                }
+                break;
+            }
+        }
+        cmdPtr += loadCmd->cmdsize;
+    }
+    return true;
 }
 
 ///*
@@ -316,6 +401,14 @@ uintptr_t czb_firstCmdAfterHeader(const struct mach_header* const header) {
     }
 }
 
+//__LINKEDIT段 含有为动态链接库使用的原始数据，比如符号，字符串，重定位表条目等等
+//阅读下面的代码之前，先来看一个计算公式
+//链接时程序的基址 = __LINKEDIT.VM_Address – __LINKEDIT.File_Offset + silde的改变值
+//这里出现了一个 slide ，那么 slide 是啥呢？先看一下 ASLR
+//ASLR：Address space layout randomization ，将可执行程序随机装载到内存中,这里的随机只是偏移，而不是打乱，具体做法就是通过内核将 Mach-O 的段“平移”某个随机系数。 slide 正是 ASLR 引入的偏移
+//也就是说程序的基址等于 __LINKEDIT 的地址减去偏移量，然后再加上 ASLR 造成的偏移
+// 我们设定segmentBase = __LINKEDIT.VM_Address – __LINKEDIT.File_Offset
+// 这里我们返回 segmentBase
 uintptr_t czb_segmentBaseOfImageIndex(const uint32_t idx) {
     const struct mach_header* header = _dyld_get_image_header(idx);
     
@@ -379,6 +472,37 @@ thread_t czb_machThreadFromNSThread(NSThread *nsthread) {
     
     [nsthread setName:originName];
     return mach_thread_self();
+}
+
+#pragma mark logbacktrace
+
+NSString* czb_logBacktraceEntry(const int entryNum, const uintptr_t address, const Dl_info* const dlInfo) {
+    char faddrBuff[20];
+    char saddrBuff[20];
+    
+    const char* fname = czb_lastPathEntry(dlInfo->dli_fname);
+    if (fname == NULL) {
+        sprintf(faddrBuff, POINTER_FMT, (uintptr_t)dlInfo->dli_fbase);
+        fname = faddrBuff;
+    }
+    uintptr_t offset = address - (uintptr_t)dlInfo->dli_saddr;
+    const char* sname = dlInfo->dli_sname;
+    if (sname == NULL) {
+        sprintf(saddrBuff, POINTER_SHORT_FMT, (uintptr_t)dlInfo->dli_fbase);
+        sname = saddrBuff;
+        offset = address - (uintptr_t)dlInfo->dli_fbase;
+    }
+    
+    return [NSString stringWithFormat:@"%-30s  0x%08" PRIxPTR " %s + %lu\n" ,fname, (uintptr_t)address, sname, offset];;
+}
+
+const char* czb_lastPathEntry(const char* const path) {
+    if (path == NULL) {
+        return NULL;
+    }
+    
+    char* lastFile = strrchr(path, '/');
+    return lastFile == NULL ? path : lastFile + 1;
 }
 
 @end

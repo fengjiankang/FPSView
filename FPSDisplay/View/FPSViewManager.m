@@ -56,7 +56,7 @@
 
 -(FPSView *)fpsView {
     if (!_fpsView) {
-        _fpsView = [[FPSView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+        _fpsView = [[FPSView alloc]initWithFrame:CGRectMake(0, 0, 100, 150)];
         _fpsView.backgroundColor = [UIColor blackColor];
     }
     return _fpsView;

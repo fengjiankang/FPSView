@@ -30,6 +30,9 @@
 // memoryLabel
 @property (strong, nonatomic) UILabel* memoryLabel;
 
+// threadCountLabel
+@property (strong, nonatomic) UILabel* threadCountLabel;
+
 @end
 
 @interface FPSView()
@@ -63,10 +66,8 @@ static double StumbleCritical = 2.0;
     [self initCADisplaylink];
     [self initCountText];
     [self initMemoryText];
-    
+    [self initThreadCountText];
     [self startMonitor];
-    
-    [TraceLogger getThreadCount];
     
 }
 
@@ -226,6 +227,8 @@ void myRunLoopObserver(CFRunLoopObserverRef observer, CFRunLoopActivity activity
     self.fpsLabel.text = [NSString stringWithFormat:@"fps: %@", [NSNumber numberWithFloat:count]];
     
     [self calculateMemorySize];
+    
+    [self getThreadCount];
 }
 
 -(UILabel *)fpsLabel {
@@ -258,7 +261,6 @@ void myRunLoopObserver(CFRunLoopObserverRef observer, CFRunLoopActivity activity
 -(void)calculateMemorySize {
     int64_t size = [self memoryUsage] / 1024 / 1024;
     self.memoryLabel.text = [NSString stringWithFormat:@"内存：%lldM", size];
-    NSLog(@"size is %lld", size);
 }
 
 - (int64_t)memoryUsage {
@@ -268,11 +270,32 @@ void myRunLoopObserver(CFRunLoopObserverRef observer, CFRunLoopActivity activity
     kern_return_t kernelReturn = task_info(mach_task_self(), TASK_VM_INFO, (task_info_t) &vmInfo, &count);
     if(kernelReturn == KERN_SUCCESS) {
         memoryUsageInByte = (int64_t) vmInfo.phys_footprint;
-        NSLog(@"Memory in use (in bytes): %lld", memoryUsageInByte);
+//        NSLog(@"Memory in use (in bytes): %lld", memoryUsageInByte);
     } else {
         NSLog(@"Error with task_info(): %s", mach_error_string(kernelReturn));
     }
     return memoryUsageInByte;
+}
+
+#pragma mark threadCountText
+
+-(UILabel *)threadCountLabel {
+    if (!_threadCountLabel) {
+        CGRect frame = CGRectMake(0, 100, 100, 50);
+        _threadCountLabel = [[UILabel alloc]initWithFrame:frame];
+        _threadCountLabel.textAlignment = NSTextAlignmentCenter;
+        _threadCountLabel.textColor = [UIColor whiteColor];
+        _threadCountLabel.font = [UIFont systemFontOfSize: 20];
+    }
+    return _threadCountLabel;
+}
+
+-(void)initThreadCountText {
+    [self addSubview:self.threadCountLabel];
+}
+
+-(void)getThreadCount {
+    self.threadCountLabel.text = [NSString stringWithFormat:@"线程：%d", [TraceLogger getThreadCount]];
 }
 
 @end
