@@ -115,6 +115,7 @@ static mach_port_t main_thread_id;
     
     NSLog(@"获取线程个数：%d", count);
     
+    NSMutableArray *nameArray = [NSMutableArray array];
     for (int i = 0 ; i < count; i++) {
         
         pthread_t pt = pthread_from_mach_thread_np(list[i]);
@@ -125,10 +126,16 @@ static mach_port_t main_thread_id;
             if (!strcmp(name, [[NSThread currentThread] name].UTF8String)) {
             }
         }
+        
         if (name[0] != '\0') {
-            NSLog(@"thread is %s", name);
+            NSString *ocName = [[NSString alloc] initWithUTF8String:name];
+            [nameArray addObject:ocName];
+//            NSLog(@"thread is %s", name);
         }
     }
+    [nameArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@"thread name is %@", obj);
+    }];
     return count;
 }
 
