@@ -13,3 +13,7 @@ The use code  `[FPSViewManager show];`
 1. Add `pod 'FPSView'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import \<FPSViewManager.h\>.
+
+# Reference
+
+打印堆栈信息：https://github.com/bestswifter/BSBacktraceLogger
