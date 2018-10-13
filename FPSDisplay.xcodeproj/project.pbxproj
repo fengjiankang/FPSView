@@ -15,12 +15,14 @@
 		BC910E8C216C426C00EB9D72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910E8B216C426C00EB9D72 /* main.m */; };
 		BC910E96216C426C00EB9D72 /* FPSDisplayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910E95216C426C00EB9D72 /* FPSDisplayTests.m */; };
 		BC910EA1216C426C00EB9D72 /* FPSDisplayUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910EA0216C426C00EB9D72 /* FPSDisplayUITests.m */; };
-		BC910F01216CBD5B00EB9D72 /* FPSView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910EFF216CBD5B00EB9D72 /* FPSView.m */; };
-		BC910F02216CBD5B00EB9D72 /* FPSViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */; };
-		BCD4CA5321719F5B00C697B3 /* FPSView+CPUUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA5221719F5B00C697B3 /* FPSView+CPUUsage.m */; };
-		BCD4CA592171B43500C697B3 /* FPSView+MemoryUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA582171B43500C697B3 /* FPSView+MemoryUsage.m */; };
-		BCD4CA5C2171B4BA00C697B3 /* FPSView+Thread.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA5B2171B4BA00C697B3 /* FPSView+Thread.m */; };
-		BCD4CA5F2171B70A00C697B3 /* FPSView+TraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA5E2171B70A00C697B3 /* FPSView+TraceLogger.m */; };
+		BCD4CA702171F11800C697B3 /* FPSView+MemoryUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA642171F11800C697B3 /* FPSView+MemoryUsage.m */; };
+		BCD4CA712171F11800C697B3 /* FPSView+Thread.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA672171F11800C697B3 /* FPSView+Thread.m */; };
+		BCD4CA722171F11800C697B3 /* FPSView+TraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA692171F11800C697B3 /* FPSView+TraceLogger.m */; };
+		BCD4CA732171F11800C697B3 /* FPSView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA6A2171F11800C697B3 /* FPSView.m */; };
+		BCD4CA742171F11800C697B3 /* FPSViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA6C2171F11800C697B3 /* FPSViewManager.m */; };
+		BCD4CA752171F11800C697B3 /* FPSView+CPUUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA6D2171F11800C697B3 /* FPSView+CPUUsage.m */; };
+		BCD4CA792171F19200C697B3 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA782171F19200C697B3 /* ThreadTableViewController.m */; };
+		BCD4CA7C2171F6FC00C697B3 /* FPSView+ThreadTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA7B2171F6FC00C697B3 /* FPSView+ThreadTableView.m */; };
 		BCFFD67F216F1EC2000A5351 /* TraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BCFFD67E216F1EC2000A5351 /* TraceLogger.m */; };
 /* End PBXBuildFile section */
 
@@ -58,18 +60,22 @@
 		BC910E9C216C426C00EB9D72 /* FPSDisplayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPSDisplayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC910EA0216C426C00EB9D72 /* FPSDisplayUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FPSDisplayUITests.m; sourceTree = "<group>"; };
 		BC910EA2216C426C00EB9D72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BC910EFD216CBD5B00EB9D72 /* FPSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSView.h; sourceTree = "<group>"; };
-		BC910EFE216CBD5B00EB9D72 /* FPSViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSViewManager.h; sourceTree = "<group>"; };
-		BC910EFF216CBD5B00EB9D72 /* FPSView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSView.m; sourceTree = "<group>"; };
-		BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSViewManager.m; sourceTree = "<group>"; };
-		BCD4CA5121719F5B00C697B3 /* FPSView+CPUUsage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FPSView+CPUUsage.h"; sourceTree = "<group>"; };
-		BCD4CA5221719F5B00C697B3 /* FPSView+CPUUsage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "FPSView+CPUUsage.m"; sourceTree = "<group>"; };
-		BCD4CA572171B43500C697B3 /* FPSView+MemoryUsage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FPSView+MemoryUsage.h"; sourceTree = "<group>"; };
-		BCD4CA582171B43500C697B3 /* FPSView+MemoryUsage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "FPSView+MemoryUsage.m"; sourceTree = "<group>"; };
-		BCD4CA5A2171B4BA00C697B3 /* FPSView+Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FPSView+Thread.h"; sourceTree = "<group>"; };
-		BCD4CA5B2171B4BA00C697B3 /* FPSView+Thread.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "FPSView+Thread.m"; sourceTree = "<group>"; };
-		BCD4CA5D2171B70A00C697B3 /* FPSView+TraceLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FPSView+TraceLogger.h"; sourceTree = "<group>"; };
-		BCD4CA5E2171B70A00C697B3 /* FPSView+TraceLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "FPSView+TraceLogger.m"; sourceTree = "<group>"; };
+		BCD4CA642171F11800C697B3 /* FPSView+MemoryUsage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FPSView+MemoryUsage.m"; sourceTree = "<group>"; };
+		BCD4CA652171F11800C697B3 /* FPSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSView.h; sourceTree = "<group>"; };
+		BCD4CA662171F11800C697B3 /* FPSView+CPUUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FPSView+CPUUsage.h"; sourceTree = "<group>"; };
+		BCD4CA672171F11800C697B3 /* FPSView+Thread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FPSView+Thread.m"; sourceTree = "<group>"; };
+		BCD4CA682171F11800C697B3 /* FPSViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSViewManager.h; sourceTree = "<group>"; };
+		BCD4CA692171F11800C697B3 /* FPSView+TraceLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FPSView+TraceLogger.m"; sourceTree = "<group>"; };
+		BCD4CA6A2171F11800C697B3 /* FPSView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSView.m; sourceTree = "<group>"; };
+		BCD4CA6B2171F11800C697B3 /* FPSView+MemoryUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FPSView+MemoryUsage.h"; sourceTree = "<group>"; };
+		BCD4CA6C2171F11800C697B3 /* FPSViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSViewManager.m; sourceTree = "<group>"; };
+		BCD4CA6D2171F11800C697B3 /* FPSView+CPUUsage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FPSView+CPUUsage.m"; sourceTree = "<group>"; };
+		BCD4CA6E2171F11800C697B3 /* FPSView+Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FPSView+Thread.h"; sourceTree = "<group>"; };
+		BCD4CA6F2171F11800C697B3 /* FPSView+TraceLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FPSView+TraceLogger.h"; sourceTree = "<group>"; };
+		BCD4CA772171F19200C697B3 /* ThreadTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadTableViewController.h; sourceTree = "<group>"; };
+		BCD4CA782171F19200C697B3 /* ThreadTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
+		BCD4CA7A2171F6FC00C697B3 /* FPSView+ThreadTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FPSView+ThreadTableView.h"; sourceTree = "<group>"; };
+		BCD4CA7B2171F6FC00C697B3 /* FPSView+ThreadTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "FPSView+ThreadTableView.m"; sourceTree = "<group>"; };
 		BCFFD67D216F1EC2000A5351 /* TraceLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TraceLogger.h; sourceTree = "<group>"; };
 		BCFFD67E216F1EC2000A5351 /* TraceLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TraceLogger.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,8 +128,8 @@
 		BC910E7B216C426900EB9D72 /* FPSDisplay */ = {
 			isa = PBXGroup;
 			children = (
+				BCD4CA622171F11800C697B3 /* View */,
 				BCFFD67C216F1E92000A5351 /* Util */,
-				BC910EFC216CBD5B00EB9D72 /* View */,
 				BC910E7C216C426900EB9D72 /* AppDelegate.h */,
 				BC910E7D216C426900EB9D72 /* AppDelegate.m */,
 				BC910E7F216C426900EB9D72 /* ViewController.h */,
@@ -155,23 +161,43 @@
 			path = FPSDisplayUITests;
 			sourceTree = "<group>";
 		};
-		BC910EFC216CBD5B00EB9D72 /* View */ = {
+		BCD4CA622171F11800C697B3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BC910EFD216CBD5B00EB9D72 /* FPSView.h */,
-				BC910EFF216CBD5B00EB9D72 /* FPSView.m */,
-				BC910EFE216CBD5B00EB9D72 /* FPSViewManager.h */,
-				BC910F00216CBD5B00EB9D72 /* FPSViewManager.m */,
-				BCD4CA5D2171B70A00C697B3 /* FPSView+TraceLogger.h */,
-				BCD4CA5E2171B70A00C697B3 /* FPSView+TraceLogger.m */,
-				BCD4CA5A2171B4BA00C697B3 /* FPSView+Thread.h */,
-				BCD4CA5B2171B4BA00C697B3 /* FPSView+Thread.m */,
-				BCD4CA572171B43500C697B3 /* FPSView+MemoryUsage.h */,
-				BCD4CA582171B43500C697B3 /* FPSView+MemoryUsage.m */,
-				BCD4CA5121719F5B00C697B3 /* FPSView+CPUUsage.h */,
-				BCD4CA5221719F5B00C697B3 /* FPSView+CPUUsage.m */,
+				BCD4CA762171F12A00C697B3 /* Base */,
+				BCD4CA632171F11800C697B3 /* FPSVIew */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		BCD4CA632171F11800C697B3 /* FPSVIew */ = {
+			isa = PBXGroup;
+			children = (
+				BCD4CA652171F11800C697B3 /* FPSView.h */,
+				BCD4CA6A2171F11800C697B3 /* FPSView.m */,
+				BCD4CA682171F11800C697B3 /* FPSViewManager.h */,
+				BCD4CA6C2171F11800C697B3 /* FPSViewManager.m */,
+				BCD4CA6E2171F11800C697B3 /* FPSView+Thread.h */,
+				BCD4CA672171F11800C697B3 /* FPSView+Thread.m */,
+				BCD4CA7A2171F6FC00C697B3 /* FPSView+ThreadTableView.h */,
+				BCD4CA7B2171F6FC00C697B3 /* FPSView+ThreadTableView.m */,
+				BCD4CA6B2171F11800C697B3 /* FPSView+MemoryUsage.h */,
+				BCD4CA642171F11800C697B3 /* FPSView+MemoryUsage.m */,
+				BCD4CA6D2171F11800C697B3 /* FPSView+CPUUsage.m */,
+				BCD4CA662171F11800C697B3 /* FPSView+CPUUsage.h */,
+				BCD4CA6F2171F11800C697B3 /* FPSView+TraceLogger.h */,
+				BCD4CA692171F11800C697B3 /* FPSView+TraceLogger.m */,
+			);
+			path = FPSVIew;
+			sourceTree = "<group>";
+		};
+		BCD4CA762171F12A00C697B3 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				BCD4CA772171F19200C697B3 /* ThreadTableViewController.h */,
+				BCD4CA782171F19200C697B3 /* ThreadTableViewController.m */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		BCFFD67C216F1E92000A5351 /* Util */ = {
@@ -313,16 +339,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCD4CA5F2171B70A00C697B3 /* FPSView+TraceLogger.m in Sources */,
-				BC910F01216CBD5B00EB9D72 /* FPSView.m in Sources */,
-				BC910F02216CBD5B00EB9D72 /* FPSViewManager.m in Sources */,
+				BCD4CA732171F11800C697B3 /* FPSView.m in Sources */,
 				BC910E81216C426900EB9D72 /* ViewController.m in Sources */,
+				BCD4CA742171F11800C697B3 /* FPSViewManager.m in Sources */,
 				BCFFD67F216F1EC2000A5351 /* TraceLogger.m in Sources */,
-				BCD4CA5C2171B4BA00C697B3 /* FPSView+Thread.m in Sources */,
-				BCD4CA5321719F5B00C697B3 /* FPSView+CPUUsage.m in Sources */,
-				BCD4CA592171B43500C697B3 /* FPSView+MemoryUsage.m in Sources */,
+				BCD4CA792171F19200C697B3 /* ThreadTableViewController.m in Sources */,
 				BC910E8C216C426C00EB9D72 /* main.m in Sources */,
 				BC910E7E216C426900EB9D72 /* AppDelegate.m in Sources */,
+				BCD4CA722171F11800C697B3 /* FPSView+TraceLogger.m in Sources */,
+				BCD4CA712171F11800C697B3 /* FPSView+Thread.m in Sources */,
+				BCD4CA702171F11800C697B3 /* FPSView+MemoryUsage.m in Sources */,
+				BCD4CA7C2171F6FC00C697B3 /* FPSView+ThreadTableView.m in Sources */,
+				BCD4CA752171F11800C697B3 /* FPSView+CPUUsage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

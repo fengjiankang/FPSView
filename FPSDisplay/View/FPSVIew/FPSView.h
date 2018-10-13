@@ -15,10 +15,14 @@
 #include <libkern/OSAtomic.h>
 #include <execinfo.h>
 
+static NSString *threadCellId = @"threadCellId";
+
 @interface FPSView : UIView {
     CFRunLoopObserverRef _observer;
     double _lastRecordTime;
     NSMutableArray *_backtrace;
 }
+
+@property (nonatomic, strong) NSArray *threadDataSource;
 
 @end

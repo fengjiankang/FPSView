@@ -107,6 +107,38 @@ static mach_port_t main_thread_id;
     main_thread_id = mach_thread_self();
 }
 
++(NSArray *)getAllThreadInformation {
+    char name[256];
+    mach_msg_type_name_t count;
+    thread_act_array_t list;
+    task_threads(mach_task_self(), &list, &count);
+    
+    NSMutableArray *nameArray = [NSMutableArray array];
+    NSMutableArray *noNameArray = [NSMutableArray array];
+    for (int i = 0 ; i < count; i++) {
+        pthread_t pt = pthread_from_mach_thread_np(list[i]);
+        if (pt) {
+            name[0] = '\0';
+            pthread_getname_np(pt, name, sizeof name);
+            if (!strcmp(name, [[NSThread currentThread] name].UTF8String)) {
+            }
+        }
+        
+        if (name[0] != '\0' || list[i] == main_thread_id) {
+            if (list[i] == main_thread_id) {
+                [nameArray addObject:@{@"id": [NSNumber numberWithInteger: main_thread_id], @"name": @"com.apple.main"}];
+            } else {
+                NSString *ocName = [[NSString alloc] initWithUTF8String:name];
+                [nameArray addObject:@{@"id": [NSNumber numberWithInteger: list[i]], @"name": ocName}];
+            }
+        } else {
+            [noNameArray addObject:@{@"id": [NSNumber numberWithInteger: list[i]], @"name": @"没有线程名称"}];
+        }
+    }
+
+     return [nameArray arrayByAddingObjectsFromArray:noNameArray];
+}
+
 +(int)getThreadCount {
     char name[256];
     mach_msg_type_name_t count;

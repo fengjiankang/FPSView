@@ -10,6 +10,9 @@
 
 @interface TraceLogger : NSObject
 
+//  get all threads's information
++(NSArray *)getAllThreadInformation;
+
 // get thread count
 +(int)getThreadCount;
 

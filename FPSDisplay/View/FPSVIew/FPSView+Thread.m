@@ -15,4 +15,8 @@
     return  [TraceLogger getThreadCount];
 }
 
+-(NSArray *)allThreadInfomation {
+    return [TraceLogger getAllThreadInformation];
+}
+
 @end

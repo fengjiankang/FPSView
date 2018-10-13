@@ -28,9 +28,15 @@
     return app;
 }
 
+#pragma mark interface
++(void)show {
+    [[UIApplication sharedApplication].keyWindow addSubview: [FPSViewManager shareInstance].fpsWindow];
+}
+
+#pragma mark fpsWindow
 -(UIWindow *)fpsWindow {
     if (!_fpsWindow) {
-        UIWindow * fpsWindow = [[UIWindow alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+        UIWindow * fpsWindow = [[UIWindow alloc]initWithFrame:CGRectMake(0, 0, 100, 200)];
         _fpsWindow = fpsWindow;
         fpsWindow.backgroundColor = [UIColor yellowColor];
         fpsWindow.rootViewController = [[UIViewController alloc]init];
@@ -54,16 +60,13 @@
     [sender setTranslation:CGPointZero inView:sender.view];
 }
 
+#pragma mark fpsView
 -(FPSView *)fpsView {
     if (!_fpsView) {
         _fpsView = [[FPSView alloc]initWithFrame:CGRectMake(0, 0, 100, 200)];
         _fpsView.backgroundColor = [UIColor blackColor];
     }
     return _fpsView;
-}
-
-+(void)show {
-    [[UIApplication sharedApplication].keyWindow addSubview: [FPSViewManager shareInstance].fpsWindow];
 }
 
 @end

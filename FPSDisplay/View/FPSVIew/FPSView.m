@@ -9,6 +9,7 @@
 #import "FPSView.h"
 #import "FPSView+TraceLogger.h"
 #import "FPSView+Thread.h"
+#import "FPSView+ThreadTableView.h"
 #import "FPSView+MemoryUsage.h"
 #import "FPSView+CPUUsage.h"
 
@@ -35,9 +36,7 @@
 // cpusageLabel
 @property (strong, nonatomic) UILabel* cpusageLabel;
 
-@end
-
-@interface FPSView()
+@property (strong, nonatomic) UITableView *threadTableView;
 
 @end
 
@@ -61,8 +60,10 @@
     [self initMemoryText];
     [self initThreadCountText];
     [self initCpusageText];
+    [self initTableView];
     
     [self startMonitor];
+    
 }
 
 
@@ -97,6 +98,9 @@
 // update fps text
 -(void)updateDisplayLabelText:(float)count {
     
+    self.threadDataSource = [self allThreadInfomation];
+    [self.threadTableView reloadData];
+    
     [self getFPSCount:(float)count];
     
     [self getMemoryCount];
@@ -104,6 +108,7 @@
     [self getThreadCount];
     
     [self getCpusageCount];
+    
 }
 
 #pragma mark fpsLabel
@@ -162,7 +167,7 @@
 }
 
 -(void)getThreadCount {
-    self.threadCountLabel.text = [NSString stringWithFormat:@"线程：%d", [self threadCount]];
+    self.threadCountLabel.text = [NSString stringWithFormat:@"线程：%lu", (unsigned long)self.threadDataSource.count];
 }
 
 #pragma mark cpusageLabel
@@ -183,6 +188,24 @@
 
 -(void)getCpusageCount {
     self.cpusageLabel.text = [NSString stringWithFormat:@"cpu：%d", (int)round([self getCpusageOfAllThread])];
+}
+
+
+#pragma mark threadTableView
+
+-(UITableView *)threadTableView {
+    if (!_threadTableView) {
+        CGRect frame = CGRectMake(100, 100, 300, 400);
+        _threadTableView = [[UITableView alloc]initWithFrame:frame style:UITableViewStylePlain];
+        _threadTableView.delegate = self;
+        _threadTableView.dataSource = self;
+    }
+
+    return _threadTableView;
+}
+
+-(void)initTableView {
+    [self addSubview:self.threadTableView];
 }
 
 @end
