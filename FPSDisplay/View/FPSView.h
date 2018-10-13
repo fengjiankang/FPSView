@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FPSView : UIView
+#import "TraceLogger.h"
+
+#import <mach/mach.h>
+#include <sys/sysctl.h>
+#include <libkern/OSAtomic.h>
+#include <execinfo.h>
+
+@interface FPSView : UIView {
+    CFRunLoopObserverRef _observer;
+    double _lastRecordTime;
+    NSMutableArray *_backtrace;
+}
 
 @end

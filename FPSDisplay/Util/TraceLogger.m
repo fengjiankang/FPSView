@@ -113,7 +113,7 @@ static mach_port_t main_thread_id;
     thread_act_array_t list;
     task_threads(mach_task_self(), &list, &count);
     
-    NSLog(@"获取线程个数：%d", count);
+//    NSLog(@"获取线程个数：%d", count);
     
     NSMutableArray *nameArray = [NSMutableArray array];
     for (int i = 0 ; i < count; i++) {
@@ -134,9 +134,32 @@ static mach_port_t main_thread_id;
         }
     }
     [nameArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"thread name is %@", obj);
+//        NSLog(@"thread name is %@", obj);
     }];
     return count;
+}
+
+#pragma mark interface
++(NSString *)czb_backtraceOfNSThread:(NSThread *)thread {
+    return _czb_backtraceOfThread(czb_machThreadFromNSThread(thread));
+}
+
++(NSString *)czb_backtraceOfAllThread:(NSThread *)thread {
+    thread_act_array_t threads;
+    mach_msg_type_number_t thread_count = 0;
+    const task_t this_task = mach_task_self();
+    
+    kern_return_t kr = task_threads(this_task, &threads, &thread_count);
+    if (kr != KERN_SUCCESS) {
+        return @"Fail to get information of all threads";
+    }
+    
+    NSMutableString *resultString = [[NSMutableString alloc]initWithFormat:@"Call Backtrace of %u threads", thread_count];
+    
+    for (int i = 0; i < thread_count; i++) {
+        [resultString appendString:_czb_backtraceOfThread(threads[i])];
+    }
+    return [resultString copy];
 }
 
 #pragma mark HandleMachineContext
