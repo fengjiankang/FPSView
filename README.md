@@ -5,4 +5,4 @@ FPSView is a suspending UIWindow that show  the frame rate，cpusage, threadCoun
 It's  easy to use.
 The use code  `[FPSViewManager show];`
 
-<img src="https://github.com/fengjiankang/FPSView/blob/master/ScreenShoots/screenshoot.png" width="320"><br/>
+<img src="https://github.com/fengjiankang/FPSView/blob/master/ScreenShoots/screenshoot.png?raw=true" width="320"><br/>
