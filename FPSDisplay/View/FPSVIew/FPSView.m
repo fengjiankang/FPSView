@@ -164,6 +164,21 @@
 
 -(void)initThreadCountText {
     [self addSubview:self.threadCountLabel];
+    [self addTapGuestureForThreadLabel];
+}
+
+-(void)addTapGuestureForThreadLabel {
+    self.threadCountLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapThreadLabel:)];
+    [self.threadCountLabel addGestureRecognizer:tap];
+}
+
+-(void)tapThreadLabel:(UITapGestureRecognizer *)sender {
+    if (self.threadTableView.superview) {
+        [self.threadTableView removeFromSuperview];
+    } else {
+        [self addSubview: self.threadTableView];
+    }
 }
 
 -(void)getThreadCount {
