@@ -21,8 +21,8 @@
 		BCD4CA732171F11800C697B3 /* FPSView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA6A2171F11800C697B3 /* FPSView.m */; };
 		BCD4CA742171F11800C697B3 /* FPSViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA6C2171F11800C697B3 /* FPSViewManager.m */; };
 		BCD4CA752171F11800C697B3 /* FPSView+CPUUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA6D2171F11800C697B3 /* FPSView+CPUUsage.m */; };
-		BCD4CA792171F19200C697B3 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA782171F19200C697B3 /* ThreadTableViewController.m */; };
 		BCD4CA7C2171F6FC00C697B3 /* FPSView+ThreadTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA7B2171F6FC00C697B3 /* FPSView+ThreadTableView.m */; };
+		BCD4CA7F21730A7300C697B3 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD4CA7E21730A7300C697B3 /* YYWeakProxy.m */; };
 		BCFFD67F216F1EC2000A5351 /* TraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BCFFD67E216F1EC2000A5351 /* TraceLogger.m */; };
 /* End PBXBuildFile section */
 
@@ -72,10 +72,10 @@
 		BCD4CA6D2171F11800C697B3 /* FPSView+CPUUsage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FPSView+CPUUsage.m"; sourceTree = "<group>"; };
 		BCD4CA6E2171F11800C697B3 /* FPSView+Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FPSView+Thread.h"; sourceTree = "<group>"; };
 		BCD4CA6F2171F11800C697B3 /* FPSView+TraceLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FPSView+TraceLogger.h"; sourceTree = "<group>"; };
-		BCD4CA772171F19200C697B3 /* ThreadTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadTableViewController.h; sourceTree = "<group>"; };
-		BCD4CA782171F19200C697B3 /* ThreadTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
 		BCD4CA7A2171F6FC00C697B3 /* FPSView+ThreadTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FPSView+ThreadTableView.h"; sourceTree = "<group>"; };
 		BCD4CA7B2171F6FC00C697B3 /* FPSView+ThreadTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "FPSView+ThreadTableView.m"; sourceTree = "<group>"; };
+		BCD4CA7D21730A7300C697B3 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
+		BCD4CA7E21730A7300C697B3 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		BCFFD67D216F1EC2000A5351 /* TraceLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TraceLogger.h; sourceTree = "<group>"; };
 		BCFFD67E216F1EC2000A5351 /* TraceLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TraceLogger.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -164,7 +164,6 @@
 		BCD4CA622171F11800C697B3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BCD4CA762171F12A00C697B3 /* Base */,
 				BCD4CA632171F11800C697B3 /* FPSVIew */,
 			);
 			path = View;
@@ -191,18 +190,11 @@
 			path = FPSVIew;
 			sourceTree = "<group>";
 		};
-		BCD4CA762171F12A00C697B3 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				BCD4CA772171F19200C697B3 /* ThreadTableViewController.h */,
-				BCD4CA782171F19200C697B3 /* ThreadTableViewController.m */,
-			);
-			path = Base;
-			sourceTree = "<group>";
-		};
 		BCFFD67C216F1E92000A5351 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				BCD4CA7D21730A7300C697B3 /* YYWeakProxy.h */,
+				BCD4CA7E21730A7300C697B3 /* YYWeakProxy.m */,
 				BCFFD67D216F1EC2000A5351 /* TraceLogger.h */,
 				BCFFD67E216F1EC2000A5351 /* TraceLogger.m */,
 			);
@@ -343,11 +335,11 @@
 				BC910E81216C426900EB9D72 /* ViewController.m in Sources */,
 				BCD4CA742171F11800C697B3 /* FPSViewManager.m in Sources */,
 				BCFFD67F216F1EC2000A5351 /* TraceLogger.m in Sources */,
-				BCD4CA792171F19200C697B3 /* ThreadTableViewController.m in Sources */,
 				BC910E8C216C426C00EB9D72 /* main.m in Sources */,
 				BC910E7E216C426900EB9D72 /* AppDelegate.m in Sources */,
 				BCD4CA722171F11800C697B3 /* FPSView+TraceLogger.m in Sources */,
 				BCD4CA712171F11800C697B3 /* FPSView+Thread.m in Sources */,
+				BCD4CA7F21730A7300C697B3 /* YYWeakProxy.m in Sources */,
 				BCD4CA702171F11800C697B3 /* FPSView+MemoryUsage.m in Sources */,
 				BCD4CA7C2171F6FC00C697B3 /* FPSView+ThreadTableView.m in Sources */,
 				BCD4CA752171F11800C697B3 /* FPSView+CPUUsage.m in Sources */,

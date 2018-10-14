@@ -70,7 +70,7 @@
 #pragma mark displaylink
 -(void)initCADisplaylink {
     self.lastTime = 0;
-    self.link = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick:)];
+    self.link = [CADisplayLink displayLinkWithTarget:[YYWeakProxy proxyWithTarget:self] selector:@selector(tick:)];
     [self.link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 

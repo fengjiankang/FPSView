@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "TraceLogger.h"
+#import "YYWeakProxy.h"
 
 #import <mach/mach.h>
 #include <sys/sysctl.h>
