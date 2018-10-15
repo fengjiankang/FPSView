@@ -7,6 +7,9 @@
 //
 
 #import "FPSView+TraceLogger.h"
+#include <sys/sysctl.h>
+#include <libkern/OSAtomic.h>
+#include <execinfo.h>
 
 @implementation FPSView (TraceLogger)
 

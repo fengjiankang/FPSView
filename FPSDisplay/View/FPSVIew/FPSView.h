@@ -10,11 +10,8 @@
 
 #import "TraceLogger.h"
 #import "YYWeakProxy.h"
-
 #import <mach/mach.h>
-#include <sys/sysctl.h>
-#include <libkern/OSAtomic.h>
-#include <execinfo.h>
+
 
 static NSString *threadCellId = @"threadCellId";
 
